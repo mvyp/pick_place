@@ -19,7 +19,8 @@
         "forward_list": "cpp",
         "list": "cpp",
         "string": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "ostream": "cpp"
     },
     "python.analysis.extraPaths": [
         "/home/tao/catkin_ws/devel/lib/python3/dist-packages",

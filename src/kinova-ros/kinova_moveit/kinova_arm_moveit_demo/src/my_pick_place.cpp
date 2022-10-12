@@ -4,7 +4,7 @@
 #include <tf_conversions/tf_eigen.h>
 
 const double FINGER_MAX = 6400;
-const double K_ = 0.01;
+const double K_ = -0.01;
 
 using namespace kinova;
 
@@ -443,12 +443,31 @@ void PickPlace::define_cartesian_pose(gpd_ros::GraspConfig pose0) {
   // generate_pregrasp_pose(double dist, double azimuth, double polar, double
   // rot_gripper_z) grasp_pose_= generate_gripper_align_pose(grasp_pose_,
   // 0.03999, 0.3, -0.7, 1.0219);
-  pregrasp_pose_ = generate_gripper_align_pose(grasp_pose_, 0.1, -M_PI / 4, M_PI /
-  2, M_PI);
+  pregrasp_pose_ = grasp_pose_;
+  Eigen::Matrix4d Trans;
+  Trans << 1, 0, 0, 0,
+           0, 1, 0, 0,
+           0, 0, 1, K_,
+           0, 0, 0, 1;
+  Eigen::Matrix4d Rot;
+  Rot << pose0.approach.x, pose0.binormal.x, pose0.axis.x, 0,
+         pose0.approach.y, pose0.binormal.y, pose0.axis.y, 0,
+         pose0.approach.z, pose0.binormal.z, pose0.axis.z, 0,
+         0               , 0               , 0           , 1;
+  Eigen::Matrix4d T = Rot * Trans;
+  pregrasp_pose_.pose.position.x =  static_cast<double>(T(0,3));
+  pregrasp_pose_.pose.position.y =  static_cast<double>(T(1,3));
+  pregrasp_pose_.pose.position.z =  static_cast<double>(T(2,3));
   postgrasp_pose_ = grasp_pose_;
   postgrasp_pose_.pose.position.z = grasp_pose_.pose.position.z + 0.05;
 }
 
+int PickPlace::define_grasp_width(gpd_ros::GraspConfig msg) {
+  int score = msg.score.data;
+
+
+  return score;
+}
 
 /**
  * @brief PickPlace::generate_gripper_align_pose
@@ -644,15 +663,15 @@ void PickPlace::evaluate_plan(
       std::cout << "plan success at attemp: " << count << std::endl;
 
       replan = false;
-      std::cout << "please input e to execute the plan, r to replan, others to "
-                   "skip: ";
-      std::cin >> pause_;
-      ros::WallDuration(0.5).sleep();
-      if (pause_ == "r" || pause_ == "R") {
-        replan = true;
-      } else {
-        replan = false;
-      }
+      // std::cout << "please input e to execute the plan, r to replan, others to "
+      //              "skip: ";
+      // std::cin >> pause_;
+      // ros::WallDuration(0.5).sleep();
+      // if (pause_ == "r" || pause_ == "R") {
+      //   replan = true;
+      // } else {
+      //   replan = false;
+      // }
     } else // not found
     {
       std::cout << "Exit since plan failed until reach maximum attemp: "
@@ -663,9 +682,10 @@ void PickPlace::evaluate_plan(
   }
 
   if (result_ == true) {
-    if (pause_ == "e" || pause_ == "E") {
-      group.execute(my_plan);
-    }
+    // if (pause_ == "e" || pause_ == "E") {
+    std::cout << "Execute..." << std::endl;
+    group.execute(my_plan);
+    // }
   }
   ros::WallDuration(1.0).sleep();
 }
@@ -673,6 +693,7 @@ void PickPlace::evaluate_plan(
 void PickPlace::my_pick(const gpd_ros::GraspConfig &mygoal) {
 
   define_cartesian_pose(mygoal);
+  score = define_grasp_width(mygoal);
   float open_width = mygoal.width.data;
   // clear_workscene();
   // ros::WallDuration(1.0).sleep();
@@ -692,9 +713,9 @@ void PickPlace::my_pick(const gpd_ros::GraspConfig &mygoal) {
   // build_workscene();
   // ros::WallDuration(0.1).sleep();
 
-  // ROS_INFO_STREAM("Planning to go to pre-grasp position ...");
-  // group_->setPoseTarget(pregrasp_pose_);
-  // evaluate_plan(*group_);
+  ROS_INFO_STREAM("Planning to go to pre-grasp position ...");
+  group_->setPoseTarget(pregrasp_pose_);
+  evaluate_plan(*group_);
   gripper_action(0.0); 
   ROS_INFO_STREAM("Grasp position ...");
   group_->setPoseTarget(grasp_pose_);

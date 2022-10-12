@@ -113,6 +113,8 @@ namespace kinova
         void define_joint_values();
         // void define_cartesian_pose();
         void define_cartesian_pose(gpd_ros::GraspConfig);
+        int define_grasp_width(gpd_ros::GraspConfig);
+
         geometry_msgs::PoseStamped generate_gripper_align_pose(geometry_msgs::PoseStamped targetpose_msg, double dist, double azimuth, double polar, double rot_gripper_z);
         void setup_constrain(geometry_msgs::Pose target_pose, bool orientation, bool position);
         void check_constrain();
