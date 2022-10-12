@@ -693,7 +693,7 @@ void PickPlace::evaluate_plan(
 void PickPlace::my_pick(const gpd_ros::GraspConfig &mygoal) {
 
   define_cartesian_pose(mygoal);
-  score = define_grasp_width(mygoal);
+  int score = define_grasp_width(mygoal);
   float open_width = mygoal.width.data;
   // clear_workscene();
   // ros::WallDuration(1.0).sleep();
