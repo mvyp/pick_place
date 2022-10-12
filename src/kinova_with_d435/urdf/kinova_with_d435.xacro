@@ -12,6 +12,11 @@
     <xacro:realsense_d435 sensor_name="camera" parent_link="j2s7s300_link_7" rate="30.0">
         <origin rpy="0 1.5707 0" xyz="0.06 0 -0.12"/>
     </xacro:realsense_d435>
-   
+    <link name="root"/>
+    <joint name="connect_root_and_world" type="fixed">
+        <child link="root" />
+        <parent link="base_link" />
+        <origin xyz="0 0 0" rpy="0 0 0" />    
+    </joint> 
     <xacro:j2s7s300  base_parent="base_link"/>
 </robot>

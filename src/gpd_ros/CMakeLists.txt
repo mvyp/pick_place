@@ -4,7 +4,7 @@ project(gpd_ros)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS cmake_modules eigen_conversions message_generation roscpp rospy sensor_msgs std_msgs)
+find_package(catkin REQUIRED COMPONENTS pcl_conversions pcl_ros cmake_modules eigen_conversions message_generation roscpp rospy sensor_msgs std_msgs)
 
 # PCL
 find_package(PCL 1.9 REQUIRED)
@@ -70,6 +70,7 @@ add_library(${PROJECT_NAME}_grasp_plotter src/${PROJECT_NAME}/grasp_plotter.cpp)
 ## Declare a C++ executable
 add_executable(${PROJECT_NAME}_detect_grasps src/gpd_ros/grasp_detection_node.cpp)
 add_executable(${PROJECT_NAME}_detect_grasps_server src/gpd_ros/grasp_detection_server.cpp)
+add_executable(cloud_filter src/filter.cpp)
 
 ## Rename C++ executable without prefix
 set_target_properties(${PROJECT_NAME}_detect_grasps PROPERTIES OUTPUT_NAME detect_grasps PREFIX "")
@@ -94,3 +95,4 @@ target_link_libraries(${PROJECT_NAME}_grasp_plotter
 target_link_libraries(${PROJECT_NAME}_grasp_messages
                       ${GPD_LIB}
                       ${catkin_LIBRARIES})
+target_link_libraries(cloud_filter ${catkin_LIBRARIES})

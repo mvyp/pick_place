@@ -6,12 +6,12 @@ const int GraspDetectionNode::POINT_CLOUD_2 = 0; ///< sensor_msgs/PointCloud2
 const int GraspDetectionNode::CLOUD_INDEXED = 1; ///< cloud with indices
 const int GraspDetectionNode::CLOUD_SAMPLES = 2; ///< cloud with (x,y,z) samples
 
-const int X_MIN = 0;
-const int X_MAX = 0;
-const int Y_MIN = 0;
-const int Y_MAX = 0;
-const int Z_MIN = 0;
-const int Z_MAX = 0;
+// const int X_MIN = 0;
+// const int X_MAX = 0;
+// const int Y_MIN = 0;
+// const int Y_MAX = 0;
+// const int Z_MIN = 0;
+// const int Z_MAX = 0;
 
 GraspDetectionNode::GraspDetectionNode(ros::NodeHandle& node) : has_cloud_(false), has_normals_(false),
   size_left_cloud_(0), has_samples_(true), frame_(""), use_importance_sampling_(false)
@@ -133,25 +133,25 @@ std::vector<std::unique_ptr<gpd::candidate::Hand>> GraspDetectionNode::detectGra
   gpd_ros::GraspConfigList selected_grasps_msg = GraspMessages::createGraspListMsg(grasps, cloud_camera_header_);
   grasps_pub_.publish(selected_grasps_msg);
   ROS_INFO_STREAM("Published " << selected_grasps_msg.grasps.size() << " highest-scoring grasps.");
-  gpd_ros::GraspConfig best_grasp_msg;
-  for(int i=0 ; i<selected_grasps_msg.grasps.size(); i++)
-  {
-    best_grasp_msg = GraspMessages::convertToGraspMsg(*grasps[i]);
-    if(best_grasp_msg.position.x > X_MIN &&
-      best_grasp_msg.position.x < X_MAX &&
-      best_grasp_msg.position.y > Y_MIN &&
-      best_grasp_msg.position.x < Y_MAX &&
-      best_grasp_msg.position.z > Z_MIN &&
-      best_grasp_msg.position.z < Z_MAX )
-      break;
-    else
-    {
-      if (i == selected_grasps_msg.grasps.size()-1)
-      {
-        ROS_INFO_STREAM("Fail to grasp.");
-      }
-    }
-  }
+  gpd_ros::GraspConfig best_grasp_msg = GraspMessages::convertToGraspMsg(*grasps[0]);
+  // for(int i=0 ; i<selected_grasps_msg.grasps.size(); i++)
+  // {
+  //   best_grasp_msg = GraspMessages::convertToGraspMsg(*grasps[i]);
+  //   if(best_grasp_msg.position.x > X_MIN &&
+  //     best_grasp_msg.position.x < X_MAX &&
+  //     best_grasp_msg.position.y > Y_MIN &&
+  //     best_grasp_msg.position.x < Y_MAX &&
+  //     best_grasp_msg.position.z > Z_MIN &&
+  //     best_grasp_msg.position.z < Z_MAX )
+  //     break;
+  //   else
+  //   {
+  //     if (i == selected_grasps_msg.grasps.size()-1)
+  //     {
+  //       ROS_INFO_STREAM("Fail to grasp.");
+  //     }
+  //   }
+  // }
   grasps_one_pub_.publish(best_grasp_msg);
   ROS_INFO_STREAM("Published the best grasp.");
   return grasps;
