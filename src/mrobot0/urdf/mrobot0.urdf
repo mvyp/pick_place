@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="mrobot0">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="18.4562925765378" />
+      <inertia
+        ixx="0.256210728643185"
+        ixy="6.56310068382338E-05"
+        ixz="-0.00180877112495313"
+        iyy="0.188299729850926"
+        iyz="-2.10390967866862E-05"
+        izz="0.145737478909493" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mrobot0/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.152941176470588 1 0.596078431372549 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mrobot0/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="front_right_link">
+    <inertial>
+      <origin
+        xyz="-5.13024805970375E-08 -0.00877234222415185 6.89433152897823E-06"
+        rpy="0 0 0" />
+      <mass
+        value="0.416037886047751" />
+      <inertia
+        ixx="0.000256520186506121"
+        ixy="4.61385776440554E-10"
+        ixz="3.98079279974602E-10"
+        iyy="0.000479257131749694"
+        iyz="-4.26781001354178E-09"
+        izz="0.000256542673895954" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mrobot0/meshes/front_right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.298039215686275 0.298039215686275 0.298039215686275 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mrobot0/meshes/front_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="front_right_joint"
+    type="continuous">
+    <origin
+      xyz="0.14942 -0.17343 -0.3725"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="front_right_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="10000"
+      velocity="100" />
+  </joint>
+  <link
+    name="front_left_link">
+    <inertial>
+      <origin
+        xyz="5.76423534737192E-08 0.0101315333235539 2.90000992594908E-08"
+        rpy="0 0 0" />
+      <mass
+        value="0.370238645739765" />
+      <inertia
+        ixx="0.000250201173071859"
+        ixy="4.61362866003811E-10"
+        ixz="-3.98072218436982E-10"
+        iyy="0.000471946895325548"
+        iyz="1.76423567462717E-10"
+        izz="0.000250204831386972" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mrobot0/meshes/front_left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mrobot0/meshes/front_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="front_left_joint"
+    type="continuous">
+    <origin
+      xyz="0.14942 0.17245 -0.3725"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="front_left_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="10000"
+      velocity="100" />
+  </joint>
+  <link
+    name="back_right_link">
+    <inertial>
+      <origin
+        xyz="-5.7642353418208E-08 -0.356012658547887 2.90000992733686E-08"
+        rpy="0 0 0" />
+      <mass
+        value="0.370238645739766" />
+      <inertia
+        ixx="0.000250201173071859"
+        ixy="4.61362865957737E-10"
+        ixz="3.98072218445388E-10"
+        iyy="0.000471946895325548"
+        iyz="-1.76423566737926E-10"
+        izz="0.000250204831386972" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mrobot0/meshes/back_right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.298039215686275 0.298039215686275 0.298039215686275 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mrobot0/meshes/back_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="back_right_joint"
+    type="continuous">
+    <origin
+      xyz="-0.15058 0.17245 -0.3725"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="back_right_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="10000"
+      velocity="100" />
+  </joint>
+  <link
+    name="back_left_link">
+    <inertial>
+      <origin
+        xyz="5.76423534459636E-08 0.356012658547887 2.90000992386741E-08"
+        rpy="0 0 0" />
+      <mass
+        value="0.370238645739765" />
+      <inertia
+        ixx="0.000250201173071859"
+        ixy="4.61362865920627E-10"
+        ixz="-3.98072218318611E-10"
+        iyy="0.000471946895325548"
+        iyz="1.76423566788219E-10"
+        izz="0.000250204831386972" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mrobot0/meshes/back_left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.298039215686275 0.298039215686275 0.298039215686275 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://mrobot0/meshes/back_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="back_left_joint"
+    type="continuous">
+    <origin
+      xyz="-0.15058 -0.17343 -0.3725"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="back_left_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="10000"
+      velocity="100" />
+  </joint>
+<gazebo reference="front_left_link">
+      <mu1 value="200.0"/>
+      <mu2 value="100.0"/>
+      <kp value="10000000.0" />
+      <kd value="1.0" />
+      <material>Gazebo/Grey</material>
+    </gazebo>
+<gazebo reference="front_right_link">
+      <mu1 value="200.0"/>
+      <mu2 value="100.0"/>
+      <kp value="10000000.0" />
+      <kd value="1.0" />
+      <material>Gazebo/Grey</material>
+    </gazebo>
+<gazebo reference="back_left_link">
+      <mu1 value="200.0"/>
+      <mu2 value="100.0"/>
+      <kp value="10000000.0" />
+      <kd value="1.0" />
+      <material>Gazebo/Grey</material>
+    </gazebo>
+<gazebo reference="back_right_link">
+      <mu1 value="200.0"/>
+      <mu2 value="100.0"/>
+      <kp value="10000000.0" />
+      <kd value="1.0" />
+      <material>Gazebo/Grey</material>
+    </gazebo>
+<gazebo>
+  <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
+    <updateRate>100.0</updateRate>
+    <robotNamespace>/</robotNamespace>
+    <leftFrontJoint>front_left_joint</leftFrontJoint>
+    <rightFrontJoint>front_right_joint</rightFrontJoint>
+    <leftRearJoint>back_left_joint</leftRearJoint>
+    <rightRearJoint>back_right_joint</rightRearJoint>
+    <wheelSeparation>0.3</wheelSeparation>
+    <wheelDiameter>0.12</wheelDiameter>
+    <robotBaseFrame>base_link</robotBaseFrame>
+    <torque>20</torque>
+    <topicName>cmd_vel</topicName>
+    <broadcastTF>false</broadcastTF>
+  </plugin>
+</gazebo>
+
+
+</robot>

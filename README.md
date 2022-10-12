@@ -6,3 +6,4 @@ rqt_image_view
 rosrun kinova_arm_moveit_demo pick_place
 roslaunch gpd_ros ur5.launch 
 ```
+test

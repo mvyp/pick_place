@@ -24,67 +24,11 @@
   <!-- for gazebo -->
   <link name="world"/>
   
-  <!-- <model name='unit_box'>
-    <pose>0.0508 -0.231174 0.5 0 -0 0</pose>
-    <link name='box_link'>
-      <inertial>
-        <mass>1</mass>
-        <inertia>
-          <ixx>0.166667</ixx>
-          <ixy>0</ixy>
-          <ixz>0</ixz>
-          <iyy>0.166667</iyy>
-          <iyz>0</iyz>
-          <izz>0.166667</izz>
-        </inertia>
-        <pose>0 0 0 0 -0 0</pose>
-      </inertial>
-      <collision name='collision'>
-        <geometry>
-          <box>
-            <size>1 1 0.4</size>
-          </box>
-        </geometry>
-        <max_contacts>10</max_contacts>
-        <surface>
-          <contact>
-            <ode/>
-          </contact>
-          <bounce/>
-          <friction>
-            <torsional>
-              <ode/>
-            </torsional>
-            <ode/>
-          </friction>
-        </surface>
-      </collision>
-      <visual name='visual'>
-        <geometry>
-          <box>
-            <size>1 1 0.999998</size>
-          </box>
-        </geometry>
-        <material>
-          <script>
-            <name>Gazebo/Grey</name>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-          </script>
-        </material>
-      </visual>
-      <self_collide>0</self_collide>
-      <enable_wind>0</enable_wind>
-      <kinematic>0</kinematic>
-    </link>
-  </model>
-  <joint name="connect_root_and_box" type="fixed">
-    <child link = "box_link"/>
-    <parent link = "world"/>
- </joint> -->
+
   <joint name="connect_root_and_world" type="fixed">
     <child link="root" />
     <parent link="world" />
-    <origin xyz="0.3 0.3 0.4" rpy="0 0 0" />    
+    <origin xyz="0 0 0" rpy="0 0 0" />    
   </joint> 
 
   <xacro:property name="robot_root" value="root" />
