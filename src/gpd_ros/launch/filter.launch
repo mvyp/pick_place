@@ -1,0 +1,5 @@
+<launch>
+  <node name="cloud_filter" pkg="gpd_ros" type="cloud_filter" output="screen">
+    <param name="input" value="/camera/depth/color/points" />
+  </node>
+</launch>

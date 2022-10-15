@@ -119,6 +119,8 @@ namespace kinova
         void setup_constrain(geometry_msgs::Pose target_pose, bool orientation, bool position);
         void check_constrain();
 
+        void evaluate_cartesian_plan(geometry_msgs::PoseStamped pre_grasp, geometry_msgs::PoseStamped fin_grasp);
+
         // bool my_pick();
         
         bool my_place();

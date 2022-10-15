@@ -26,7 +26,7 @@ def talker():
         goal.axis.y = 0
         goal.axis.z = 0
 
-        goal.width.data = 1000
+        goal.width.data = 4000
 
         goal.sample.x = 0
         goal.sample.y = 0

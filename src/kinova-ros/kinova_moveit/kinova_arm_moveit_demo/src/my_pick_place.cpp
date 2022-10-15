@@ -4,7 +4,7 @@
 #include <tf_conversions/tf_eigen.h>
 
 const double FINGER_MAX = 6400;
-const double K_ = -0.01;
+const double K_ = -0.1;
 
 using namespace kinova;
 
@@ -450,14 +450,14 @@ void PickPlace::define_cartesian_pose(gpd_ros::GraspConfig pose0) {
            0, 0, 1, K_,
            0, 0, 0, 1;
   Eigen::Matrix4d Rot;
-  Rot << pose0.approach.x, pose0.binormal.x, pose0.axis.x, 0,
-         pose0.approach.y, pose0.binormal.y, pose0.axis.y, 0,
-         pose0.approach.z, pose0.binormal.z, pose0.axis.z, 0,
+  Rot << pose0.approach.x, pose0.binormal.x, pose0.axis.x, pose0.position.x,
+         pose0.approach.y, pose0.binormal.y, pose0.axis.y, pose0.position.y,
+         pose0.approach.z, pose0.binormal.z, pose0.axis.z, pose0.position.z,
          0               , 0               , 0           , 1;
-  Eigen::Matrix4d T = Rot * Trans;
-  pregrasp_pose_.pose.position.x =  static_cast<double>(T(0,3));
-  pregrasp_pose_.pose.position.y =  static_cast<double>(T(1,3));
-  pregrasp_pose_.pose.position.z =  static_cast<double>(T(2,3));
+  Eigen::Matrix4d Tr = Rot * Trans;
+  pregrasp_pose_.pose.position.x =  static_cast<double>(Tr(0,3));
+  pregrasp_pose_.pose.position.y =  static_cast<double>(Tr(1,3));
+  pregrasp_pose_.pose.position.z =  static_cast<double>(Tr(2,3));
   postgrasp_pose_ = grasp_pose_;
   postgrasp_pose_.pose.position.z = grasp_pose_.pose.position.z + 0.05;
 }
@@ -690,10 +690,60 @@ void PickPlace::evaluate_plan(
   ros::WallDuration(1.0).sleep();
 }
 
+void PickPlace::evaluate_cartesian_plan(geometry_msgs::PoseStamped pre_grasp, geometry_msgs::PoseStamped fin_grasp)
+{
+      // 获取当前位姿数据最为机械臂运动的起始位姿
+    boost::mutex::scoped_lock lock_state(mutex_state_);
+    geometry_msgs::PoseStamped copy_pose = current_pose_;
+    geometry_msgs::Pose pre_grasp_pose = pre_grasp.pose;
+    geometry_msgs::Pose fin_grasp_pose = fin_grasp.pose;
+    geometry_msgs::Pose copy_pose2 = copy_pose.pose;
+
+    std::vector<geometry_msgs::Pose> waypoints;
+
+      //将初始位姿加入路点列表
+    waypoints.push_back(pre_grasp_pose);
+    waypoints.push_back(fin_grasp_pose);
+
+    // 笛卡尔空间下的路径规划
+    moveit_msgs::RobotTrajectory trajectory;
+    const double jump_threshold = 0.0;
+    const double eef_step = 0.01;
+    double fraction = 0.0;
+    int maxtries = 100;   //最大尝试规划次数
+    int attempts = 0;     //已经尝试规划次数
+
+    while(fraction < 1.0 && attempts < maxtries)
+    {
+        fraction = group_->computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
+        attempts++;
+        
+        if(attempts % 10 == 0)
+            ROS_INFO("Still trying after %d attempts...", attempts);
+    }
+    
+    if(fraction == 1)
+    {   
+        ROS_INFO("Path computed successfully. Moving the arm.");
+
+	    // 生成机械臂的运动规划数据
+	    moveit::planning_interface::MoveGroupInterface::Plan plan;
+	    plan.trajectory_ = trajectory;
+
+	    // 执行运动
+	    group_->execute(plan);
+      sleep(1);
+    }
+    else
+    {
+        ROS_INFO("Path planning failed with only %0.6f success after %d attempts.", fraction, maxtries);
+    }
+
+}
 void PickPlace::my_pick(const gpd_ros::GraspConfig &mygoal) {
 
   define_cartesian_pose(mygoal);
-  int score = define_grasp_width(mygoal);
+  int width = define_grasp_width(mygoal);
   float open_width = mygoal.width.data;
   // clear_workscene();
   // ros::WallDuration(1.0).sleep();
@@ -711,20 +761,20 @@ void PickPlace::my_pick(const gpd_ros::GraspConfig &mygoal) {
   ROS_INFO_STREAM("STAR ...");
   // clear_workscene();
   // build_workscene();
-  // ros::WallDuration(0.1).sleep();
-
+  ros::WallDuration(0.1).sleep();
   ROS_INFO_STREAM("Planning to go to pre-grasp position ...");
   group_->setPoseTarget(pregrasp_pose_);
   evaluate_plan(*group_);
   gripper_action(0.0); 
-  ROS_INFO_STREAM("Grasp position ...");
-  group_->setPoseTarget(grasp_pose_);
-  evaluate_plan(*group_);
+  // ROS_INFO_STREAM("Grasp position ...");
+  // group_->setPoseTarget(grasp_pose_);
+  // evaluate_plan(*group_);
+  evaluate_cartesian_plan(pregrasp_pose_, grasp_pose_);
 
   ROS_INFO_STREAM("Grasping ...");
   // add_attached_obstacle();
   // gripper_action(open_width * FINGER_MAX); // partially close
-  gripper_action(6400);
+  gripper_action(width);
   ROS_INFO_STREAM("Planning to return to start position  ...");
   group_->setPoseTarget(start_pose_);
   evaluate_plan(*group_);
